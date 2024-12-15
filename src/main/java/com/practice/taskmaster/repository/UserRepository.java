@@ -18,4 +18,10 @@ public interface UserRepository extends JpaRepository<User, Long>{
 	Optional<User> findByEmail(String name);
 	
 	Optional<User> findByPassword(String name);
+	
+	@Query("SELECT u FROM User u  WHERE u.team.id=:teamId")
+	Set<User> FindByTeamId(@Param("teamId") Long teamId);
+	
+	@Query("SELECT u FROM User u WHERE u.project.id=:projectId")
+	Set<User> findByProjectId(@Param("projectId") Long projectId);
 }

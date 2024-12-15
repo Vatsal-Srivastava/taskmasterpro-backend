@@ -21,6 +21,7 @@ public class Comment extends BaseDateClass {
 //	@JoinColumn(name = "task_id", nullable = false)
 //	private Task task;
 
+	// Comment to a comment future
 	public Comment() {
 		super();
 	}

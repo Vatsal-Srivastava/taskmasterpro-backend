@@ -41,6 +41,10 @@ public class Project extends BaseDateClass {
 	@OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
 	@JsonManagedReference
 	private Set<Task> tasks = new HashSet<>();
+	
+	@OneToMany(mappedBy = "project")
+    @JsonManagedReference
+    private Set<User> users;
 
 	public Project() {
 		super();

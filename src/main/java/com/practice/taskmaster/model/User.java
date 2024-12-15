@@ -54,11 +54,20 @@ public class User extends BaseDateClass {
     @Column(nullable = true)
     @JsonManagedReference
     private Set<Task> managedTasks = new HashSet<>();
+    
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name="user_id")
+    private Set<Comment> comments = new HashSet<>();
 	
 	@ManyToOne
 	@JoinColumn(name= "team_id", nullable = true)
 	@JsonBackReference
 	private Team team;
+	
+	@ManyToOne
+	@JoinColumn(name = "project_id", nullable = true)
+    @JsonBackReference
+	private Project project;
 
 	public User() {
 		super();
