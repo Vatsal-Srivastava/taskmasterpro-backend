@@ -50,7 +50,8 @@ public class Project extends BaseDateClass {
 		super();
 	}
 
-	public Project(Long id, String title, String description, User manager, Team team, Set<Task> tasks) {
+	public Project(Long id, String title, String description, User manager, Team team, Set<Task> tasks,
+			Set<User> users) {
 		super();
 		this.id = id;
 		this.title = title;
@@ -58,6 +59,7 @@ public class Project extends BaseDateClass {
 		this.manager = manager;
 		this.team = team;
 		this.tasks = tasks;
+		this.users = users;
 	}
 
 	public Long getId() {
@@ -106,6 +108,14 @@ public class Project extends BaseDateClass {
 
 	public void setTasks(Set<Task> tasks) {
 		this.tasks = tasks;
+	}
+
+	public Set<User> getUsers() {
+		return users;
+	}
+
+	public void setUsers(Set<User> users) {
+		this.users = users;
 	}
 
 	@Override

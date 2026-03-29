@@ -1,11 +1,14 @@
 package com.practice.taskmaster.model;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.sound.midi.Track;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
@@ -32,7 +35,10 @@ public class User extends BaseDateClass {
 	private Long id;
 
 	private String name;
+	@Column(unique = true)
 	private String email;
+
+	@JsonIgnore
 	private String password;
 
 	@ManyToMany(fetch = FetchType.LAZY)
@@ -43,6 +49,10 @@ public class User extends BaseDateClass {
 	@OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	@JsonManagedReference
 	private Set<Task> tasks = new HashSet<>();
+	
+	@OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	@JsonManagedReference
+	private Set<SubTask> subtasks = new HashSet<>();
 	
 	@OneToMany(mappedBy = "createdBy", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	@Column(nullable = true)
@@ -68,18 +78,29 @@ public class User extends BaseDateClass {
 	@JoinColumn(name = "project_id", nullable = true)
     @JsonBackReference
 	private Project project;
+	
+	@OneToMany(mappedBy = "user", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY, orphanRemoval = true)
+	@JsonManagedReference
+	private List<Notification> notifications = new ArrayList<>();
 
 	public User() {
 		super();
 	}
 
-	public User(Long id, String name, String password, String email, Set<Role> roles) {
+	public User(Long id, String name, String email, String password, Set<Role> roles, Set<Task> tasks,
+			Set<Task> createdTasks, Set<Task> managedTasks, Set<Comment> comments, Team team, Project project) {
 		super();
 		this.id = id;
 		this.name = name;
-		this.password = password;
 		this.email = email;
+		this.password = password;
 		this.roles = roles;
+		this.tasks = tasks;
+		this.createdTasks = createdTasks;
+		this.managedTasks = managedTasks;
+		this.comments = comments;
+		this.team = team;
+		this.project = project;
 	}
 
 	public Long getId() {
@@ -120,6 +141,70 @@ public class User extends BaseDateClass {
 
 	public void setRoles(Set<Role> roles) {
 		this.roles = roles;
+	}
+
+	public Set<Task> getTasks() {
+		return tasks;
+	}
+
+	public void setTasks(Set<Task> tasks) {
+		this.tasks = tasks;
+	}
+
+	public Set<Task> getCreatedTasks() {
+		return createdTasks;
+	}
+
+	public void setCreatedTasks(Set<Task> createdTasks) {
+		this.createdTasks = createdTasks;
+	}
+
+	public Set<Task> getManagedTasks() {
+		return managedTasks;
+	}
+
+	public void setManagedTasks(Set<Task> managedTasks) {
+		this.managedTasks = managedTasks;
+	}
+
+	public Set<Comment> getComments() {
+		return comments;
+	}
+
+	public void setComments(Set<Comment> comments) {
+		this.comments = comments;
+	}
+
+	public Team getTeam() {
+		return team;
+	}
+
+	public void setTeam(Team team) {
+		this.team = team;
+	}
+
+	public Project getProject() {
+		return project;
+	}
+
+	public void setProject(Project project) {
+		this.project = project;
+	}
+	
+	public Set<SubTask> getSubtasks() {
+		return subtasks;
+	}
+
+	public void setSubtasks(Set<SubTask> subtasks) {
+		this.subtasks = subtasks;
+	}
+
+	public List<Notification> getNotifications() {
+		return notifications;
+	}
+
+	public void setNotifications(List<Notification> notifications) {
+		this.notifications = notifications;
 	}
 
 	@Override

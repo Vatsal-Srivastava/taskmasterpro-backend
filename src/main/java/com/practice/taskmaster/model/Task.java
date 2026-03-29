@@ -1,13 +1,16 @@
 package com.practice.taskmaster.model;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -32,11 +35,11 @@ public class Task extends BaseDateClass {
 	@Column(name = "task_id")
 	private Long id;
 	
-	private String name;
+	private String title;
 
 	// task assigned to user(one to many) title
 	@ManyToOne
-	@JoinColumn(name = "user_id", nullable = true)
+	@JoinColumn(name = "assigned_user_id", nullable = true)
 	@JsonBackReference
 	private User user;
 
@@ -84,15 +87,21 @@ public class Task extends BaseDateClass {
 	@Column(name = "due_date", nullable = true)
 	private LocalDate dueDate;
 	// tags Optional
-
+	
+	@OneToMany
+	@JsonManagedReference
+	private List<SubTask> subtask = new ArrayList<>();
+	
 	public Task() {
 		super();
 	}
 
-	public Task(Long id, User user, String description, TaskStatus status, TaskPriority priority, Set<Comment> comments,
-			User createdBy, User manager, Team team, Project project, LocalDate dueDate) {
+	public Task(Long id, String title, User user, String description, TaskStatus status, TaskPriority priority,
+			Set<Comment> comments, User createdBy, User manager, Team team, Project project, LocalDate dueDate,
+			List<SubTask> subtask) {
 		super();
 		this.id = id;
+		this.title = title;
 		this.user = user;
 		this.description = description;
 		this.status = status;
@@ -103,7 +112,10 @@ public class Task extends BaseDateClass {
 		this.team = team;
 		this.project = project;
 		this.dueDate = dueDate;
+		this.subtask = subtask;
 	}
+
+
 
 	public Long getId() {
 		return id;
